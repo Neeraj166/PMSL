@@ -14,8 +14,12 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->bigInteger('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('categories');
+
             $table->string('cat_name');
+            $table->enum('status',['0','1'])->default('1');
             $table->timestamps();
         });
     }
