@@ -32,7 +32,8 @@ Route::post('/editcat/{id}',[CatController::class, 'update'])->middleware(['auth
 Route::get('/product',[ProductController::class,'index'])->middleware(['auth']);
 Route::get('/create',[ProductController::class, 'create'])->middleware(['auth'])->name('product.create');
 Route::post('/create',[ProductController::class, 'store'])->middleware(['auth']);
-Route::get('/edit{id}',[ProductController::class, 'edit'])->middleware(['auth'])->name('edit');
+Route::get('/edit/{id}',[ProductController::class, 'edit'])->middleware(['auth'])->name('edit');
+Route::post('/edit/{id}',[ProductController::class, 'update'])->middleware(['auth']);
 
 
 require __DIR__.'/auth.php';

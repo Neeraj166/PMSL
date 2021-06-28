@@ -15,21 +15,20 @@
     <th>Price</th>
     <th>Description</th>
     <th>Status</th>
-    <th colspan="2">Operation</th>
+    <th colspan="2">Action</th>
 
     </thead>
     @foreach($product as $product)
     @foreach($image as $images)
     @if($product->id===$images->product_id)
-    <tr><td><img src="{{$images->image}}" height="200" width="200"> @break
+    <tr><td><img src="{{asset('uploads')}}/{{$images->image}}" height="200" width="200"> @break
     @endif
     @endforeach 
     <td>{{$product->name}}</td>
    <td>{{$product->price}}</td>
    <td>{{$product->description}}</td>
     <td>@if("$product->status"==='1')Active @else Inactive @endif</td>
-    <td><a href="{{route('edit',$product->id)}}">Edit</a></td>
-    <td><a href="">Delete</a></td>
+    <td><a href="{{route('edit',$product->id)}}">View Details</a></td>
  
     </td>
 

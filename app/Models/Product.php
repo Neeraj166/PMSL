@@ -15,7 +15,13 @@ class Product extends Model
         'price',
         'description',
         'images',
+        'status',
     ];
+
+    public function category()
+    {
+        return $this->belongsToMany(categories::class,'procats','product_id','category_id');
+    }
 
     // public function image()
     // {

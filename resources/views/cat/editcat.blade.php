@@ -17,20 +17,12 @@
                <input type="text" name="cat_name" value="{{$category->cat_name}}" >
                </td>
                <tr>
-               <td>Category Status:</td>
-               <td>
-               <select name="status">
-               <option value="$category->status">
-               @if("$category->status"==="1")
-               Active 
-               @else 
-               InActive
-                @endif
-                </option>
-               <option value="0">InActive</option>
-               <option value="1">Active</option>
-               </select>
-               </td>
+                <td>Category Status:</td>
+                <td>
+                    <input type="radio" name="status" value="1" @if($category->status==="1")checked @endif>Active
+                    <input type="radio" name="status" value="0" @if($category->status==="0")checked @endif>InActive
+                </td>
+            </tr></br>
             <tr>            
             <tr>  <td>
                 <input type ="submit" value="UPDATE" name ="add">
