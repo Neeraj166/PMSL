@@ -7,7 +7,9 @@ use App\Models\images;
 use App\Models\Product;
 use App\Models\procat;
 use App\Models\sizes;
+use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -47,8 +49,6 @@ class ProductController extends Controller
         //category and product
         $category_id = $request->category_id;
         //  dd($category_id);
-        $category=implode(" ",$category_id);
-        // dd($category);
         $data = [];
         foreach($category_id as $category) {
             $data[] = [
@@ -61,8 +61,13 @@ class ProductController extends Controller
         //sizes
         $size= new sizes();
         $size->product_id=$last_id;
-        $size->sku=$request->sku;
+        $sku=$size->sku=$request->sku;
         $size->size=$request->size;
+        // if (DB::table('sizes')->where('sku',$sku)->exists())
+        // {
+        //     echo 'SKU already exist'; 
+        // }
+    
         $size->save();
 
         // dd($last_id);
@@ -90,14 +95,13 @@ class ProductController extends Controller
     {
         // $image=images::where('product_id',$id)->get();
         // $product=Product::find($id);
-        // $product=procat::find($id);
-        // $categories=categories::whereNotNull('category_id')->where('status','1')->get();//subcategories
-        // $catego=categories::whereNull('category_id')->where('status','1')->get();//categories
+        $subcat=categories::whereNotNull('category_id')->get();//subcategories
+        $category=categories::whereNull('category_id')->get();//categories
         // return view('product.edit',compact('product','image','categories','catego'));
 
-        $product=Product::with('category')->find($id);
-        // dd($product);
-        return view('product.edit',compact('product'));
+        $product=Product::with('getcategory')->with('getimage')->with('getsize')->find($id);
+        // dd($subcat);
+        return view('product.edit',compact('category','subcat','product'));
     }
 
 
@@ -105,22 +109,12 @@ class ProductController extends Controller
     public function update(Request $request,  $id)
     {
 
+        //product table
         $input=$request->all();
         $product=Product::find($id);
-    // dd($input);
-          $product->update($input);
-       
-        // $ab=$id->name = $request->name;
-        // $ab=$id->id = $request->id;
-        // dd($ab);
-        // $id->price = $request->price;
-        // $id->status=$request->status;
-        // $id->description = $request->description;
-        // $id->category_id = $request->category_id;
-        // dd($ab,$bc,$cd,$ef);
-        // $id->save();
-        // $last_id=$id;
-        // dd($last_id);
+        $product->update($input);
+
+        //image table
         if($request->hasFile('image'))
         {
             $image_array=$request->file('image');
@@ -138,12 +132,63 @@ class ProductController extends Controller
                 $image->save();
             }
         }
+
+        //category
+        procat::where('product_id',$id)->delete();
+        $category_id = $request->category_id;
+        $data = [];
+        foreach($category_id as $category) 
+        {
+            $data[] = [
+                'product_id' => $id,
+                'category_id' => $category
+            ];
+        } 
+        procat::insert($data);
         return redirect('product');
+        
+        //size table
+        // $size=$request->input('size');
+        // $sku=$request->input('sku');
+        // DB::update('update sizes set size=?, sku=? where product_id=?',[$size,$sku,$id]);
+
+        // $sizes = $request->size;
+        // $skus=$request->sku;
+        // dd($skus);
+        // $n=count($sizes);
+        // $data = [];
+        // foreach($sizes as $size) {
+        //     foreach($skus as $sku){
+        //     $data[] = [
+        //         'product_id' => $id,
+        //         'size'=>$size,
+        //         'sku'=>$sku
+        //     ];
+        // }}
+        // dd($data);
+        // sizes::insert($data);
     
     }
 
-    public function destroy(Product $product)
+    public function sku($id)
     {
-        //
+        $size=sizes::where('product_id',$id)->get();
+        return view('product.size',compact('size'));
     }
+
+    public function add_sku(Request $request,$id)
+    {
+        $sku=new sizes;
+        $size=$sku->size=$request->size;
+        // dd($size);
+        $skus=$sku->sku=$request->sku; 
+        $sku->product_id=$id;
+        if(sizes::where('sku',$skus)->exists()){
+            dd('Data already exist');
+        } else if(sizes::where('size',$size)->where('product_id',$id)->exists()){
+            dd('Data already exist');
+        } else{
+        $sku->save();
+        return  redirect('product');
+    }}
 }

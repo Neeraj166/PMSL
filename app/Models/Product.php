@@ -10,7 +10,6 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id',
         'name',
         'price',
         'description',
@@ -18,10 +17,21 @@ class Product extends Model
         'status',
     ];
 
-    public function category()
+    public function getcategory()
     {
         return $this->belongsToMany(categories::class,'procats','product_id','category_id');
     }
+
+    public function getimage()
+    {
+        return $this->hasmany(images::class,'product_id','id');
+    }
+
+    public function getsize()
+    {
+        return $this->hasmany(sizes::class,'product_id','id');
+    }
+
 
     // public function image()
     // {

@@ -35,5 +35,8 @@ Route::post('/create',[ProductController::class, 'store'])->middleware(['auth'])
 Route::get('/edit/{id}',[ProductController::class, 'edit'])->middleware(['auth'])->name('edit');
 Route::post('/edit/{id}',[ProductController::class, 'update'])->middleware(['auth']);
 
+Route::get('/sku/{id}',[ProductController::class,'sku'])->middleware('auth')->name('sku');
+Route::post('/sku/{id}',[ProductController::class,'add_sku'])->middleware('auth')->name('addsku');
+
 
 require __DIR__.'/auth.php';

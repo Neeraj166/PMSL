@@ -9,5 +9,5 @@ class images extends Model
 {
     use HasFactory;
 
-    
+   
 }

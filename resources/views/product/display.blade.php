@@ -8,6 +8,7 @@
 </head>
 <body>
     <a href="create">Add Product </a>
+    <a href="addcat">Add Categories</a>
     <table border="1">
     <thead>
     <th>Product Image</th>
