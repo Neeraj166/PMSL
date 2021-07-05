@@ -10,7 +10,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     You're logged in! <br>
-                    <a href="showcat">Display Categories</a>
+                    <b><a href="showcat">Display Categories</a><br>
+                    <a href="addcat">Add Categories</a><br>
+                    <a href="product">Display Products</a><br>
+                    <a href="create">Add Products</a><br></b>
                 </div>
             </div>
         </div>

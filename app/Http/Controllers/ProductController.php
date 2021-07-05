@@ -43,9 +43,19 @@ class ProductController extends Controller
         // $data=$request->all();
         // // dd($data);
         // $create=Product::create($data);
-
         $last_id=$pro->id;
 
+        //sizes
+        $size= new sizes();
+        $size->product_id=$last_id;
+        $sku=$size->sku=$request->sku;
+        if(sizes::where('sku',$sku)->exists()){
+            product::where('id',$last_id)->delete();
+            echo'SKU already exist, Please enter valid SKU';
+        }
+        else
+        { 
+        $size->size=$request->size;$size->save();
         //category and product
         $category_id = $request->category_id;
         //  dd($category_id);
@@ -57,18 +67,6 @@ class ProductController extends Controller
             ];
         }
         procat::insert($data);
-
-        //sizes
-        $size= new sizes();
-        $size->product_id=$last_id;
-        $sku=$size->sku=$request->sku;
-        $size->size=$request->size;
-        // if (DB::table('sizes')->where('sku',$sku)->exists())
-        // {
-        //     echo 'SKU already exist'; 
-        // }
-    
-        $size->save();
 
         // dd($last_id);
         if($request->hasFile('image'))
@@ -89,7 +87,7 @@ class ProductController extends Controller
             }
         }
         return  redirect('product');
-    }
+    }}
 
     public function edit($id)
     {
@@ -98,17 +96,13 @@ class ProductController extends Controller
         $subcat=categories::whereNotNull('category_id')->get();//subcategories
         $category=categories::whereNull('category_id')->get();//categories
         // return view('product.edit',compact('product','image','categories','catego'));
-
         $product=Product::with('getcategory')->with('getimage')->with('getsize')->find($id);
         // dd($subcat);
         return view('product.edit',compact('category','subcat','product'));
     }
 
-
-
     public function update(Request $request,  $id)
     {
-
         //product table
         $input=$request->all();
         $product=Product::find($id);
@@ -134,19 +128,35 @@ class ProductController extends Controller
         }
 
         //category
-        procat::where('product_id',$id)->delete();
         $category_id = $request->category_id;
-        $data = [];
-        foreach($category_id as $category) 
+        // dd($category_id);
+        $savedcat_id=procat::where('product_id',$id)->get('category_id')->toarray();
+        $datacat=[];
+        foreach($savedcat_id as $saved)
         {
-            $data[] = [
-                'product_id' => $id,
-                'category_id' => $category
+            // var_dump ($save);
+            $datacat=array_merge_recursive($datacat,$saved);   
+        }
+        $databcat=array_reduce($datacat,'array_merge',array());
+        $delete=array_diff($databcat,$category_id);
+        // dd($delete);
+        foreach($delete as $del)
+        {
+            // dd($del);
+            procat::where('category_id',$del)->delete();
+        }
+        $add=array_diff($category_id,$databcat);
+        $catadd =[];
+        foreach($add as $adds)
+        {
+            $catadd[]=[
+                'product_id'=>$id,
+                'category_id'=>$adds
             ];
-        } 
-        procat::insert($data);
+        }
+        procat::insert($catadd);
         return redirect('product');
-        
+
         //size table
         // $size=$request->input('size');
         // $sku=$request->input('sku');
@@ -184,9 +194,9 @@ class ProductController extends Controller
         $skus=$sku->sku=$request->sku; 
         $sku->product_id=$id;
         if(sizes::where('sku',$skus)->exists()){
-            dd('Data already exist');
+            echo'SKU already exist';
         } else if(sizes::where('size',$size)->where('product_id',$id)->exists()){
-            dd('Data already exist');
+            echo 'Size already exist';
         } else{
         $sku->save();
         return  redirect('product');

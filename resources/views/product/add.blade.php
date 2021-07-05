@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<a href="showcat">Display Categories</a>
+<a href="showcat">Display Categories</a><br>
 <a href="product">Display Products</a>
 
     <form action="{{route('product.create')}}" method="post" enctype="multipart/form-data">
@@ -31,17 +31,17 @@
             <tr>
                 <td>Product Name:</td>
                 <td>
-                    <input type="text" name="name" >
+                    <input type="text" name="name" required>
                 </td>
             </tr><tr>
             <tr>
                 <td>Price:</td>
                 <td>
-                    <input type="number" name="price" >
+                    <input type="number" name="price" required>
                 </td>
             </tr><tr>
             <td>Description:</td><td>
-            <textarea name="description" placeholder='Product Description'></textarea>  
+            <textarea name="description" placeholder='Product Description' required></textarea>  
             </td>
             </tr>
             <tr>
@@ -61,7 +61,7 @@
                 </td>
             </tr>
             <tr><td>Image:</td><td>
-            <input type="file" name="image[]" multiple >
+            <input type="file" name="image[]" multiple required>
             <tr>  <td>
                 <input type ="submit" value="Submit">
                 </td>
