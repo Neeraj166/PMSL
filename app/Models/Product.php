@@ -32,9 +32,4 @@ class Product extends Model
         return $this->hasmany(sizes::class,'product_id','id');
     }
 
-
-    // public function image()
-    // {
-    //     return $this->hasMany(images::class,'product_id','id');
-    // }
 }

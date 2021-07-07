@@ -10,5 +10,10 @@ class categories extends Model
     use HasFactory;
     protected $gaurded=[];
 
+    protected $fillable = [
+        'category_id',
+        'cat_name',
+        'status'
+    ];
 
 }
