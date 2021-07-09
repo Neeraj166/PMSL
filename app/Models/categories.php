@@ -16,4 +16,9 @@ class categories extends Model
         'status'
     ];
 
+    public function getproduct()
+    {
+        return $this->belongsToMany(Product::class,'procats','category_id','product_id');
+    }
+
 }

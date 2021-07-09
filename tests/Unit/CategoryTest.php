@@ -22,8 +22,9 @@ class CategoryTest extends TestCase
     }
     public function test_edit_category()
     {
-        $category=categories::all()->random();
-        dd($category);
+        $category=categories::factory()->create();
+        $name=$category->cat_name="hello";
+        $this->assertDatabaseHas('categories',['cat_name'=>$name]);
 
     }
 }

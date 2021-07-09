@@ -22,7 +22,7 @@
     @foreach($product as $product)
     @foreach($image as $images)
     @if($product->id===$images->product_id)
-    <tr><td><img src="{{asset('uploads')}}/{{$images->image}}" height="200" width="200"> @break
+    <tr><td><img src="{{asset('uploads')}}/{{$images->image}}" height="50" width="50"> @break
     @endif
     @endforeach 
     <td>{{$product->name}}</td>

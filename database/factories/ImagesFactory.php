@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\categories;
+use App\Models\images;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoriesFactory extends Factory
+class ImagesFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = categories::class;
+    protected $model = images::class;
 
     /**
      * Define the model's default state.
@@ -21,8 +22,9 @@ class CategoriesFactory extends Factory
      */
     public function definition()
     {
-        return [    
-            'cat_name' => $this->faker->name(),
+        return [
+            'product_id'=>Product::inrandomorder()->first()->id,
+            'image'=>$this->faker->image(),
         ];
     }
 }

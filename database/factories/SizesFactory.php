@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\categories;
+use App\Models\sizes;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoriesFactory extends Factory
+class SizesFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = categories::class;
+    protected $model = sizes::class;
 
     /**
      * Define the model's default state.
@@ -21,8 +22,10 @@ class CategoriesFactory extends Factory
      */
     public function definition()
     {
-        return [    
-            'cat_name' => $this->faker->name(),
+        return [
+            'product_id'=>Product::inrandomorder()->first()->id,
+            'sku'=>rand(0,10000),
+            'size'=>$this->faker->randomElement(['s','m','l']),
         ];
     }
 }

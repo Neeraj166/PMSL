@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard',[CatController::class,'dashboard'])->middleware(['auth'])->name('dashboard');
 
 Route::get('/addcat',[CatController::class, 'create'])->middleware(['auth'])->name('addcat');
 Route::post('/addcat',[CatController::class, 'save'])->middleware(['auth']);
@@ -37,6 +37,9 @@ Route::post('/edit/{id}',[ProductController::class, 'update'])->middleware(['aut
 
 Route::get('/sku/{id}',[ProductController::class,'sku'])->middleware('auth')->name('sku');
 Route::post('/sku/{id}',[ProductController::class,'add_sku'])->middleware('auth')->name('addsku');
+
+Route::get('/list/{id}',[CatController::class, 'categorymenu'])->middleware(['auth'])->name('category');
+Route::get('/sublist/{id}',[CatController::class, 'subcategorymenu'])->middleware(['auth'])->name('subcategory');
 
 
 require __DIR__.'/auth.php';

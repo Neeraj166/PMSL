@@ -2,17 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\procat;
+use App\Models\Product;
 use App\Models\categories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoriesFactory extends Factory
+class ProcatFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = categories::class;
+    protected $model = procat::class;
 
     /**
      * Define the model's default state.
@@ -21,8 +23,9 @@ class CategoriesFactory extends Factory
      */
     public function definition()
     {
-        return [    
-            'cat_name' => $this->faker->name(),
+        return [
+            'product_id'=>Product::inrandomorder()->first()->id,
+            'category_id'=>categories::inrandomorder()->first()->id,
         ];
     }
 }
