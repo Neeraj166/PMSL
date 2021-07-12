@@ -58,18 +58,24 @@ class CatController extends Controller
         }
         public function categorymenu($id)
     {
-        $category=categories::with(['getproduct' => function ($getproduct) {
-            $getproduct->where('status', '1');
-        }])->where('category_id',$id)->where('status','1')->get();
+        $this->id=$id;
+        $category=categories::
+        // with(['getproduct' => function ($getproduct) {
+        //     $getproduct->where('status','0');}])->
+        with(['getsubcategory'=>function($getsubcategory)
+            { ; $getsubcategory->where('status','1')->where('category_id',$this->id)->
+                with('getproduct', function($getproduct){
+                    $getproduct->where('status','1');
+                });
+            }])
+        ->where('status','1')->where('category_id',NULL)->get();
         // dd($category);
-        $subcat=categories::where('category_id',$id)->where('status','1')->get();
-        // dd($subcat);
-        return view('list',compact('category','subcat'));
+        return view('list',compact('category'));
     }
 
     public function subcategorymenu($id)
     {
-        $category=categories::with(['getproduct' => function ($getproduct) {
+        $category=categories::with(['getproduct'=> function ($getproduct) {
             $getproduct->where('status', '1');
         }])->where('id',$id)->where('status','1')->get();
         // dd($category);
