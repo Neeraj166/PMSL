@@ -1,14 +1,15 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
 use App\Models\categories;
 use App\Models\Product;
+use App\Models\procat;
 use Illuminate\Http\Request;
 
 class CatController extends Controller
 {
-    public function index()
+    public function dashboard()
     {
         $catego=categories::whereNULL('category_id')->get();
         $subcatego=categories::whereNOTNULL('category_id')->get();
@@ -24,7 +25,6 @@ class CatController extends Controller
         $cat=new categories();
         $ab=$cat->category_id=$request->category_id;
         $bc=$cat->cat_name=$request->cat_name;
-       
         $cat->save();
         return redirect('/showcat');
     }
@@ -49,36 +49,95 @@ class CatController extends Controller
         return redirect('/showcat');  
         }
 
-        public function dashboard()
+        public function index()
         {
             $catego=categories::whereNULL('category_id')->where('status','1')->get();
             $subcat=categories::whereNOTNULL('category_id')->where('status','1')->get();
-            $product=Product::where('status','1')->get();
+            $product=Product::with('getcategory')->with('getimage')->where('status','1')->get();
+            
+            // $ab=categories::whereNULL('category_id')->where('status','1')->get('id')->toarray();
+            // // dd($ab);   
+            // $bc=categories::where('category_id',NULL)->with(['getsubcategory'=>function($getsubcategory){
+            //     $getsubcategory->where('status','1')->get('id');}])->where('status','1')->get();
+            //     $datacat=[];
+            //     dd($bc);
+            //     foreach($bc as $saved)
+            //     {
+            //         // var_dump ($save);
+            //         $datacat=array_merge_recursive($datacat,$saved);   
+            //     }     
+            //     $databcat=array_reduce($datacat,'array_merge',array());
+            //     dd($datacat);
         return view('dashboard',compact('catego','product','subcat'));
         }
+
         public function categorymenu($id)
     {
-        $this->id=$id;
-        $category=categories::
-        // with(['getproduct' => function ($getproduct) {
-        //     $getproduct->where('status','0');}])->
-        with(['getsubcategory'=>function($getsubcategory)
-            { ; $getsubcategory->where('status','1')->where('category_id',$this->id)->
-                with('getproduct', function($getproduct){
-                    $getproduct->where('status','1');
-                });
-            }])
-        ->where('status','1')->where('category_id',NULL)->get();
-        // dd($category);
-        return view('list',compact('category'));
+        $subcat=categories::where('category_id',$id)->where('status','1')->get('id')->toarray();
+        $cat_id=[];
+        foreach($subcat as $b){
+            $cat_id=array_merge_recursive($cat_id,$b);
+        }
+        $c=[]; 
+        // dd($cat_id);
+        foreach ($cat_id as $a)
+        {
+            foreach ($a as $b)
+            {
+                $c[]=$b;
+            }
+        }
+        // dd($c);
+        $e=[];
+        foreach($c as $d)
+        {
+            $e[]=procat::where('category_id',$d)->get('product_id')->toarray();
+        }
+        // dd($e);
+        $f=[];
+        foreach ($e as $g)
+        {
+            foreach ($g as $h)
+            {
+                $f=array_merge_recursive($h,$f);
+            }
+        }
+        $fg=[];
+        foreach($f as $z)
+         {
+            $fg=$z;  
+        }
+        $fh= array_unique($fg);
+        // dd($fh);
+
+        $product=[];
+        foreach($fh as $i)
+        {$this->i=$i;
+            $product[]=Product::where('status',1)->with('getimage')->where('id',$i)->get('name');
+        }
+        // dd($product);
+        return view('list',compact('product'));
+        // $product=categories::
+        // with(['getsubcategory'=>function($getsubcategory)
+        //     {  
+        //          $getsubcategory->where('status','1')->where('category_id',$this->id)->
+        //         with('getproduct', function($getproduct){
+        //             $getproduct->where('status','1');
+        //         });
+        //     }])
+        // ->where('status','1')->where('category_id',NULL)->get();
+          
     }
 
     public function subcategorymenu($id)
-    {
-        $category=categories::with(['getproduct'=> function ($getproduct) {
+    {   
+        $status=categories::find($id);
+        if($status->status =='1'){
+            $category=categories::with(['getproduct'=> function ($getproduct) {
             $getproduct->where('status', '1');
-        }])->where('id',$id)->where('status','1')->get();
-        // dd($category);
-        return view('listproduct',compact('category'));
+            }])->where('id',$id)->where('status','1')->get();
+            // dd($category);
+            return view('listproduct',compact('category'));
     }
+    echo'Could not find item...';}
 }

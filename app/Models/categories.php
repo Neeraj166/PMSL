@@ -24,5 +24,9 @@ class categories extends Model
     {
         return $this->hasMany(categories::class,'category_id','id');
     }
+    public function getprocat()
+    {
+        return $this->hasMany(procat::class,'category_id','id');
+    }
 
 }

@@ -1,12 +1,11 @@
-
-</h3>
+<x-header/>
 <table>
-@foreach($category as $pro)
-@foreach($pro->getsubcategory as $get)
-@foreach($get->getproduct as $prod)
-<tr><td>{{$prod->name}}</td></tr>
-@endforeach
-@endforeach
+@foreach($product as $pro)
+    @foreach($pro as $prods)<tr><td>{{$prods->name}}</td></tr>
+        @foreach($prods->getimage as $prod)
+        <td><img src="{{asset('uploads')}}/{{$prod->image}}" height="100" width="100"></td><td>{{$prods->name}}</td></tr>
+        @endforeach
+    @endforeach
 @endforeach
 </table>
                 

@@ -13,7 +13,19 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Index') }}
+                        <x-nav-link :href="route('category.list')" :active="request()->routeIs('dashboard')">
+                        {{ __('Display Categories') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('addcat')" :active="request()->routeIs('dashboard')">
+                        {{ __('Add Categories') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('dashboard')">
+                        {{ __('Add Product') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('product.list')" :active="request()->routeIs('dashboard')">
+                        {{ __('Display Product') }}
+                    </x-nav-link>
                     </x-nav-link>
                 </div>
             </div>

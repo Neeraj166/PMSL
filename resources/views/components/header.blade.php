@@ -79,26 +79,22 @@ button {
 }
 </style>
 </head>
-<body>
-@yield('header')
 <div class="navbar">
-<li style="float:right"><button class="button"><a href="{{route('category.list')}}">Dashboard</a></li>
-    </button>
-  @foreach($catego as $cat)
-    <div class="dropdown">
-    <button class="dropbtn"><a href="{{route('category',$cat->id)}}">{{$cat->cat_name}}</a>
-    <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-         @foreach($subcat as $sub)
-            @if($cat->id==$sub->category_id)
-                <a href="{{route('subcategory',$sub->id)}}">{{$sub->cat_name}}</a> 
-            @endif
-        @endforeach
+    <li style="float:right"><button class="button"><a href="{{route('category.list')}}">Dashboard</a></li></button>
+    <li style="float:left" ><button class="button"><a href="{{route('dashboard')}}">Home</a></li></button>
+    @foreach($catego as $cat)
+        <div class="dropdown">
+            <button class="dropbtn"><a href="{{route('category',$cat->id)}}">{{ucwords($cat->cat_name)}}</a>
+            <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                @foreach($subcat as $sub)
+                    @if($cat->id==$sub->category_id)
+                        <a href="{{route('subcategory',$sub->id)}}">{{ucwords($sub->cat_name)}}</a> 
+                    @endif
+                @endforeach
+            </div>
+        </div> 
+    @endforeach
 </div>
-  </div> @endforeach
 
-</div>
-@yield('content')
-</body>
-</html>
